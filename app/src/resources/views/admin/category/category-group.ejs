@@ -1,0 +1,45 @@
+<ul class="list-group list-group-flush">
+    <% categories.map(category => { %>
+
+        <li class="list-group-item">
+            <div class="d-flex">
+                <span><%= category.name %></span>
+                <div class="actions mr-2">
+                    <% if (can('delete-categories')){ %>
+                        <form method="post" id="cate-<%= category._id %>-delete"
+                              action="/admin/categories/delete/<%= category._id %>?_method=delete&_csrf=<%= req.csrfToken() %>">
+                            <input type="hidden" name="category_id" value="<%= category._id %>">
+                        </form>
+                        <a href="#"
+                           onclick="let result=confirm('ایا از حذف دسته بر مورد نظر مطمعن هستید؟');
+                                   if (result){event.preventDefault();document.getElementById('cate-<%= category._id %>-delete').submit()}"
+                           class="badge badge-danger">حذف</a>
+                    <% } %>
+                    <% if (can('edit-categories')){ %>
+                        <a href="/admin/categories/<%= category._id %>/edit"
+                           class="badge badge-warning">ویرایش</a>
+                    <% } %>
+                    <% if (can('create-categories')){ %>
+                        <a href="/admin/categories/create?parent=<%= category._id %>"
+                           class="badge badge-primary">افزودن زیر دسته</a>
+                    <% } %>
+                </div>
+            </div>
+            <% if(category.children.length>0){ %>
+
+
+                <%- include('./category-group',{categories:category.children}) -%>
+            <% } %>
+        </li>
+    <% }); %>
+</ul>
+
+
+<style>
+    li.list-group-item > ul.list-group {
+        margin-top: 10px;
+        margin-right: 20px;
+    }
+</style>
+
+
