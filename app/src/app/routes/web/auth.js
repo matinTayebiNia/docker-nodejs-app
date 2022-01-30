@@ -1,7 +1,6 @@
 const express = require('express');
 const routes = express.Router();
 //middleware
-const existTokenResetPassword = require('app/http/middleware/existTokenResetPassword');
 //controllers
 const googleAuthController = require('app/http/controllers/Auth/googleAuthController')
 const loginController = require('app/http/controllers/Auth/loginController');
@@ -25,7 +24,7 @@ routes.get('/password/reset', forgetPasswordController.showForgetPassword);
 routes.post('/password/email',
     forgetRequest.handel(),
     forgetPasswordController.sendPasswordResetLink)
-routes.get('/password/reset/:token', existTokenResetPassword.handel,
+routes.get('/password/reset/:token',
     resetPasswordController.showRestPassword)
 routes.post('/password/reset',
     resetRequest.handel(),
